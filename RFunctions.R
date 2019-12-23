@@ -32,7 +32,7 @@ order_by_category$CVSS3.Base <- as.numeric(as.character(order_by_category$CVSS3.
 critic_cves <- filter(order_by_category, order_by_category$CVSS.Base >= 7.0)
 
 # Create the plot
-plot(x = critic_cves$Category)
+plot(x = critic_cves$Category,main="Vulnerabilities with HIGH impact",xlab = "Categories", ylab = "Nº Vulnerabilities")
 #plot(x = critic_cves$Category, horiz = TRUE, las = 1)
 
 #info <- critic_cves %>% group_by(Category) %>% summarise(cve_num = n(),
