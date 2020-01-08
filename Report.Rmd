@@ -17,20 +17,21 @@ library(RColorBrewer)
 Para la realización de esta entrega, partimos de la base de datos de vulnerabilidades de Qualys.
 
 ## 1. Leer Archivo CSV
+
 En primer lugar leeremos el archivo csv donde se encuentran las vulnerabilidades, y lo convertiremos en un dataframe.
 
 ```{r eval=TRUE, echo=FALSE}
 csv <- read_csv("DL_vulnerabilities_abtes2mv_20191217.csv", skip = 3)
 
 ```
-
+***
 ## 2. Eliminar campos no relevantes
 En segundo lugar, una vez leído el archivo, nos quedaremos con los siguientes campos: QID, CVE ID, Category, SubCategory, CVSS Base y CVSS3 Base.
 
 ```{r eval=TRUE}
 my_df <- select(csv,QID,matches("CVE ID"),Category,matches("Sub Category"),matches("CVSS Base"),matches("CVSS3 Base"))
 ```
-
+***
 ## 3. Eliminar filas incompletas
 A continuación, eliminaremos aquellas filas del dataframe que tienen campos incompletos para evitar que entorpezcan nuestro análisis.
 
@@ -39,7 +40,7 @@ df <- filter(my_df, !is.na(my_df$`CVE ID`))
 df <- filter(df, df$`CVSS Base` != '\'-')
 df <- filter(df, df$`CVSS3 Base` != '\'-')
 ```
-
+***
 ## 4. Dividir campo CVE ID
 Para aquellas columnas correspondientes al 'CVE ID' que tengan más de un cve, las dividiremos en varias filas replicando la información de la fila para cada cve distinto.
 
@@ -47,7 +48,7 @@ Para aquellas columnas correspondientes al 'CVE ID' que tengan más de un cve, l
 df_elegant <- strsplit(df$`CVE ID`, split = ",")
 elegant_data <- data.frame(QID = rep(df$QID, sapply(df_elegant, length)), `CVE ID`  = unlist(df_elegant), Category = rep(df$Category, sapply(df_elegant, length)), `Sub Category` = rep(df$`Sub Category`, sapply(df_elegant, length)), `CVSS Base`  = rep(df$`CVSS Base`, sapply(df_elegant, length)), `CVSS3 Base`  = rep(df$`CVSS3 Base`, sapply(df_elegant, length)))
 ```
-
+***
 ## 5.Ordenar las vulnerabilidades por categoría
 En quinto lugar, ordenamos las vulnerabilidades en función de la categoría a la que pertenecen.
 
@@ -55,7 +56,7 @@ En quinto lugar, ordenamos las vulnerabilidades en función de la categoría a l
 order_by_category <- arrange(elegant_data, elegant_data$Category)
 
 ```
-
+***
 ## 6. Convertir CVSS Base y CVSS3 Base a tipo numérico
 A continuación, cambiamos el tipo de dato de las columnas 'CVSS Base' y 'CVSS3 Base' de 'factor' a 'numeric'
 
@@ -64,7 +65,7 @@ order_by_category$CVSS.Base <- as.numeric(as.character(order_by_category$CVSS.Ba
 order_by_category$CVSS3.Base <- as.numeric(as.character(order_by_category$CVSS3.Base))
 
 ```
-
+***
 ## 7. Agrupar vulnerabilidades en función de su impacto
 Basándonos en el estándar CVSS, agruparemos las vulnereabilidades por la categoría a la que pertenecen contando el número de ellas que tienen un impacto alto un impacto medio y un impacto bajo.
 
@@ -74,7 +75,7 @@ cvss_impact_df <- order_by_category %>% group_by(Category) %>% summarise(high = 
                                                        low = sum((CVSS.Base <= 3.9))
                                                        )
 ```
-
+***
 ## 8. Extraer observaciones y ordenar dataframe
 De las columnas obtenidas anteriormente según el impacto, se procede a extraer observaciones a partir de esas variables. 
 
@@ -88,8 +89,8 @@ Finalmente se ordena el dataframe en función de la categoría.
 cvss_impact_order_df <- arrange(cvss_impact_df, cvss_impact_df$Category)
 
 ```
-
-## 9. Construír gráfico
+***
+## 9. Construír gráfico Impacto CVSS
 Antes de contruír el gráfico se definen los colores que se van a utilizar.
 
 ```{r eval=TRUE}
@@ -109,9 +110,24 @@ ggplot(data=cvss_impact_order_df, aes(x=cvss_impact_order_df$Category, y=cvss_im
 ```
 
 
-
-
-
-
-
 ![](cvss_impact_plot.png)
+
+
+Lo que se puede observar en el gráfico superior es que las categorías "SUSE" y "LOCAL" son las que más vulnerabilidades presentan, y además son las categorías que más vulnerabilidades de impacto Alto tienen. Cabe destacar que en las categorías "Internet Explorer", "Office Application", "Oracle VM Server", "Solaris" y "Windows", aunque presentan un número de vulnerabilidades bajo, casi la totalidad de ellas son de impacto Alto.
+
+***
+## 10. Contruír gráfico CVSS vs CVSS3
+Se construye un gráfico que representa las vulnerabilidades en función de la puntuación correspondiente al impacto que tienen en el estándar CVSS y en el estándar CVSS3.
+
+Los colores representan cada categoría de vulnerabilidades, y el tamaño de los puntos representa el número de vulnerabilidades; cuanto más grande sea este, quiere decir que más número de vulnerabilidades tienen los mismos valores.
+
+```{r eval=TRUE}
+
+
+```
+***
+
+
+
+
+
