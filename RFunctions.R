@@ -75,8 +75,8 @@ a <- ggplot(order_by_category, aes(x=Category, y=CVSS.Base, fill = CVE.ID))
 a + geom_bar() + labs(title="Vulnerabilities with HIGH impact") + xlab("Categories") + ylab("Nº Vulnerabilities")
 
 
-#g <- ggplot(order_by_category, aes(CVSS.Base, CVSS3.Base, color = Category))
-#g + geom_count() + labs(title="CVSS vs CVSS3") + xlab("CVSS") + ylab("CVSS3")
+cvss_cvss3_plot <- ggplot(order_by_category, aes(CVSS.Base, CVSS3.Base, color = Category))
+cvss_cvss3_plot + geom_count() + labs(title="CVSS vs CVSS3", color="Categorías") + xlab("CVSS") + ylab("CVSS3")
 
 
 

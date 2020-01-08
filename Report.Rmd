@@ -121,11 +121,13 @@ Se construye un gráfico que representa las vulnerabilidades en función de la p
 
 Los colores representan cada categoría de vulnerabilidades, y el tamaño de los puntos representa el número de vulnerabilidades; cuanto más grande sea este, quiere decir que más número de vulnerabilidades tienen los mismos valores.
 
-```{r eval=TRUE}
-
+```
+cvss_cvss3_plot <- ggplot(order_by_category, aes(CVSS.Base, CVSS3.Base, color = Category))
+cvss_cvss3_plot + geom_count() + labs(title="CVSS vs CVSS3", color="Categorías") + xlab("CVSS") + ylab("CVSS3")
 
 ```
-***
+
+![](cvss_cvss3_plot.png)
 
 
 
