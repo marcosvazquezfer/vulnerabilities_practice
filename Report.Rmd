@@ -20,7 +20,7 @@ Para la realización de esta entrega, partimos de la base de datos de vulnerabil
 
 En primer lugar leeremos el archivo csv donde se encuentran las vulnerabilidades, y lo convertiremos en un dataframe.
 
-```{r eval=TRUE, echo=FALSE}
+```{r}
 csv <- read_csv("DL_vulnerabilities_abtes2mv_20191217.csv", skip = 3)
 
 ```
