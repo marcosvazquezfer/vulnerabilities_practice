@@ -61,7 +61,7 @@ my_colors <- list("#FFC0CB","#F0E68C","#AFEEEE")
 ggplot(data=cvss_impact_order_df, aes(x=cvss_impact_order_df$Category, y=cvss_impact_order_df$num_cves, fill=cvss_impact_order_df$CVSS_Impact)) + 
   geom_bar(stat="identity") +
   scale_fill_manual(values = my_colors) +
-  labs(title="Vulnerabilities by Impact") + 
+  labs(title="Vulnerabilities by Impact", fill = "CVSS Impact") + 
   xlab("Categories") + 
   ylab("Nº Vulnerabilities")
 
