@@ -372,13 +372,26 @@ summary {
 <div id="leer-archivo-csv" class="section level2">
 <h2>1. Leer Archivo CSV</h2>
 <p>En primer lugar leeremos el archivo csv dónde se encuentran las vulnerabilidades y lo convertiremos en un dataframe</p>
-<pre><code>csv &lt;- read_csv(&quot;DL_vulnerabilities_abtes2mv_20191217.csv&quot;, skip = 3)
-</code></pre>
+<pre class="r"><code>csv &lt;- read_csv(&quot;DL_vulnerabilities_abtes2mv_20191217.csv&quot;, skip = 3)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   QID = col_double(),
+##   Title = col_character(),
+##   `Sub Category` = col_character(),
+##   Category = col_character(),
+##   `CVE ID` = col_character(),
+##   `Vendor Reference` = col_character(),
+##   `CVSS Base` = col_character(),
+##   `CVSS3 Base` = col_character(),
+##   `Bugtraq ID` = col_character(),
+##   Modified = col_character(),
+##   Published = col_character()
+## )</code></pre>
 </div>
 <div id="eliminar-campos-no-relevantes" class="section level2">
 <h2>2. Eliminar campos no relevantes</h2>
 <p>En segundo lugar, una vez leído el archivo, nos quedaremos con los siguientes campos: QID, CVE ID, Category, SubCategory, CVSS Base y CVSS3 Base.</p>
-<pre><code>my_df &lt;- select(csv,QID,matches(&quot;CVE ID&quot;),Category,matches(&quot;Sub Category&quot;),matches(&quot;CVSS Base&quot;),matches(&quot;CVSS3 Base&quot;))</code></pre>
+<pre class="r"><code>my_df &lt;- select(csv,QID,matches(&quot;CVE ID&quot;),Category,matches(&quot;Sub Category&quot;),matches(&quot;CVSS Base&quot;),matches(&quot;CVSS3 Base&quot;))</code></pre>
 </div>
 <div id="eliminar-filas-incompletas" class="section level2">
 <h2>3. Eliminar filas incompletas</h2>

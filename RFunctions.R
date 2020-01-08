@@ -1,5 +1,8 @@
 library(readr)
 library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(RColorBrewer)
 warnings()
 
 csv <- read_csv("DL_vulnerabilities_abtes2mv_20191217.csv", skip = 3)
@@ -31,9 +34,51 @@ order_by_category$CVSS3.Base <- as.numeric(as.character(order_by_category$CVSS3.
 # Based on CVSS standard, filter the dataframe to keep only the vulnerabilities with a high impact
 critic_cves <- filter(order_by_category, order_by_category$CVSS.Base >= 7.0)
 
+
+
+
+# Modifies the dataframe "order_by_category" to obtain a dataframe containing the categories of vulnerabilities
+# and the number of vulnerabilities grouped by its impact based on "CVSS.Base column
+cvss_impact_df <- order_by_category %>% group_by(Category) %>% summarise(high = sum(CVSS.Base >= 7.0),
+                                                       medium = sum((CVSS.Base > 3.9) & (CVSS.Base < 7.0)),
+                                                       low = sum((CVSS.Base <= 3.9))
+                                                       )
+
+# Extracts observations from "cvss impact" variables
+cvss_impact_df <- gather(cvss_impact_df,"CVSS_Impact","num_cves",2:4)
+
+# Order the dataframe by category
+cvss_impact_order_df <- arrange(cvss_impact_df, cvss_impact_df$Category)
+
+#display.brewer.all()
+#display.brewer.pal(n = 2-3, name = 'Accent')
+
+# Set the colors to be used in the next plot
+my_colors <- list("#FFC0CB","#F0E68C","#AFEEEE")
+
+# Creates a plot that represents the number of vulnerabilities by category that belongs to 
+# CVSS high impact, medium impact or low impact 
+ggplot(data=cvss_impact_order_df, aes(x=cvss_impact_order_df$Category, y=cvss_impact_order_df$num_cves, fill=cvss_impact_order_df$CVSS_Impact)) + 
+  geom_bar(stat="identity") +
+  scale_fill_manual(values = my_colors) +
+  labs(title="Vulnerabilities by Impact") + 
+  xlab("Categories") + 
+  ylab("Nº Vulnerabilities")
+
+
+
+
 # Create the plot
 plot(x = critic_cves$Category,main="Vulnerabilities with HIGH impact",xlab = "Categories", ylab = "Nº Vulnerabilities")
 #plot(x = critic_cves$Category, horiz = TRUE, las = 1)
+a <- ggplot(order_by_category, aes(x=Category, y=CVSS.Base, fill = CVE.ID))
+a + geom_bar() + labs(title="Vulnerabilities with HIGH impact") + xlab("Categories") + ylab("Nº Vulnerabilities")
+
+
+#g <- ggplot(order_by_category, aes(CVSS.Base, CVSS3.Base, color = Category))
+#g + geom_count() + labs(title="CVSS vs CVSS3") + xlab("CVSS") + ylab("CVSS3")
+
+
 
 #info <- critic_cves %>% group_by(Category) %>% summarise(cve_num = n(),
 #                                                          cvss_mean = mean(CVSS.Base),

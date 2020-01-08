@@ -16,7 +16,7 @@ Para la realización de esta entrega, partimos de la base de datos de vulnerabil
 ## 1. Leer Archivo CSV
 En primer lugar leeremos el archivo csv dónde se encuentran las vulnerabilidades y lo convertiremos en un dataframe
 
-```
+```{r}
 csv <- read_csv("DL_vulnerabilities_abtes2mv_20191217.csv", skip = 3)
 
 ```
@@ -24,7 +24,7 @@ csv <- read_csv("DL_vulnerabilities_abtes2mv_20191217.csv", skip = 3)
 ## 2. Eliminar campos no relevantes
 En segundo lugar, una vez leído el archivo, nos quedaremos con los siguientes campos: QID, CVE ID, Category, SubCategory, CVSS Base y CVSS3 Base.
 
-```
+```{r}
 my_df <- select(csv,QID,matches("CVE ID"),Category,matches("Sub Category"),matches("CVSS Base"),matches("CVSS3 Base"))
 ```
 
