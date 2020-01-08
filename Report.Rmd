@@ -130,6 +130,6 @@ cvss_cvss3_plot + geom_count() + labs(title="CVSS vs CVSS3", color="Categorías"
 ![](cvss_cvss3_plot.png)
 
 
-
+En El gráfico superior se puede osbervar que, por lo general, las vulnerabilidades obtienen una puntuación más alta en el estándar CVSS3 que en el estándar CVSS, aunque se dan casos en los que la situación se invierte. Cabe destacar que, de los tres casos en los que el número de vulnerabilidades con la misma puntuación es más elevado, en dos de ellos la puntuación es mayor si miramos el estándar CVSS3 con respecto al CVSS.
 
 
